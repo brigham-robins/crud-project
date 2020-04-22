@@ -60,4 +60,12 @@ router.put('/', async (req, res) => {
     }
 })
 
+router.delete('/:id', async (req, res) => {
+    const movieId = req.params.id
+
+    await DataAccessLayer.deleteMovie(movieId)
+
+    res.send(movieId)
+})
+
 module.exports = router;

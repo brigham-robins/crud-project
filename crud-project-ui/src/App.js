@@ -107,7 +107,7 @@ export default class App extends Component {
   }
 
   editMovie = (event) => {
-    const movieId = event.target.id
+    const movieId = event.target.movieid
     const movie = this.state.movies.reduce((movieToEdit, movie) => {
       return movie._id === movieId ? movie : movieToEdit
     }, null)
@@ -116,6 +116,21 @@ export default class App extends Component {
       this.setState({
         userInput: movie
       })
+    }
+  }
+
+  deleteMovie = async (event) => {
+    const movieId = event.target.attributes.getNamedItem('movieid').value
+
+    const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/movies/${movieId}`, {
+      method: 'DELETE',
+      mode: 'cors'
+    })
+
+    const successful = response.status === 200
+
+    if (successful) {
+      await this.getMovies()
     }
   }
 
@@ -129,8 +144,8 @@ export default class App extends Component {
     return this.state.movies.map((movie) => {
       return (
         <div key={movie._id}>
-          <button id={movie._id} onClick={this.editMovie}>{movie.movieTitle}</button>
-          <button>(delete)</button>
+          <button movieid={movie._id} onClick={this.editMovie}>{movie.movieTitle}</button>
+          <button movieid={movie._id} onClick={this.deleteMovie}>(delete)</button>
         </div>
       )
     })

@@ -37,17 +37,28 @@ const createMovie = async (movie) => {
 
 const updateMovie = async (movie) => {
     const client = await getConnectedClient()
-    const {_id, ...movieToSave} = movie
+    const { _id, ...movieToSave } = movie
 
     try {
         const collection = await getMoviesCollection(client)
         await collection.updateOne({ _id: ObjectId(movie._id) }, {
             $set: movieToSave
-    })
+        })
     } finally {
-    client.close()
-}
+        client.close()
+    }
 }
 
-module.exports = { getMovies, createMovie, updateMovie }
+const deleteMovie = async (movieId) => {
+    const client = await getConnectedClient();
+
+    try {
+        const collection = await getMoviesCollection(client)
+        await collection.deleteOne({ _id: ObjectId(movieId) })
+    } finally {
+        client.close()
+    }
+}
+
+module.exports = { getMovies, createMovie, updateMovie, deleteMovie }
 

@@ -68,4 +68,4 @@ router.delete('/:id', async (req, res) => {
     res.send(movieId)
 })
 
-module.exports = router;
+module.exports = {router};
